@@ -31,7 +31,7 @@ rich==13.9.2
 rpds-py==0.20.0
 six==1.16.0
 smmap==5.0.1
-streamlit==1.39.0
+streamlit
 tenacity==9.0.0
 toml==0.10.2
 tornado==6.4.1
@@ -39,4 +39,4 @@ typing_extensions==4.12.2
 tzdata==2024.2
 urllib3==2.2.3
 watchdog==5.0.3
-tensorflow==2.17
+tensorflow
