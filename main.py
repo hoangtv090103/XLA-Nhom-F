@@ -3,10 +3,14 @@ import os
 import streamlit as st
 import warnings
 import tensorflow as tf
+
+import logging
+
+_logger = logging.getLogger(__name__)
+
 def load_model():
     try:
-        st.write("Đang tải mô hình...")
-        model_dir = os.path.join(os.path.dirname(__file__), 'model/mri_classification_model.h5')
+        model_dir = os.path.join(os.path.dirname(__file__), 'model/final_best_model.keras')
         print(model_dir)
         model = tf.keras.models.load_model(model_dir)
         st.write("Mô hình đã được tải.")
@@ -18,7 +22,12 @@ def load_model():
 if __name__ == '__main__':
     st.title("Phân loại MRI")
     warnings.filterwarnings("ignore", message=".*missing ScriptRunContext.*")
-    model = load_model()
+    try:
+        model = load_model()
+        _logger.info("Model loaded")
+    except Exception as e:
+        st.write("Lỗi khi tải mô hình:", e)
+        model = None
     if model is None:
         st.write("Không thể tải mô hình.")
         st.stop()
@@ -32,7 +41,7 @@ if __name__ == '__main__':
             image = tf.io.decode_image(uploaded_file.getvalue(), channels=3)
             image = tf.image.resize(image, [224, 224])
             image = tf.cast(image, tf.float32)
-            image = image / 255.0
+            image = tf.divide(tf.cast(image, tf.float32), 255.0)
             image = tf.expand_dims(image, axis=0)
 
             # Predict
